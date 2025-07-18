@@ -29,6 +29,10 @@ if ( file_exists( UCSCCOMMS_PLUGIN_DIR . 'lib/functions/general.php' ) ) {
 if ( file_exists( UCSCCOMMS_PLUGIN_DIR . '/lib/functions/settings.php' ) ) {
 	include_once UCSCCOMMS_PLUGIN_DIR . '/lib/functions/settings.php';
 }
+// Include shortcodes.
+if ( file_exists( UCSCCOMMS_PLUGIN_DIR . '/lib/functions/shortcodes.php' ) ) {
+	include_once UCSCCOMMS_PLUGIN_DIR . '/lib/functions/shortcodes.php';
+}
 // Enqueue admin settings styles.
 if ( ! function_exists( 'ucsccomms_enqueue_admin_styles' ) ) {
 	/**
