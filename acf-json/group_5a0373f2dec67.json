@@ -1,0 +1,113 @@
+{
+    "key": "group_5a0373f2dec67",
+    "title": "Social Media",
+    "fields": [
+        {
+            "key": "field_5a0373fcf8afd",
+            "label": "Social Media Property",
+            "name": "social_media_property",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Select your Social Media property from the field below, then enter its URL.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_5a03743cf8afe",
+                    "label": "Social Media Site",
+                    "name": "social_media_site",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Select Social Media Site",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "Choose one": "Choose one",
+                        "Facebook": "Facebook",
+                        "Twitter": "Twitter",
+                        "Instagram": "Instagram",
+                        "Pinterest": "Pinterest",
+                        "LinkedIn": "LinkedIn",
+                        "YouTube": "YouTube",
+                        "Vimeo": "Vimeo",
+                        "Flickr": "Flickr",
+                        "Medium": "Medium",
+                        "Tumblr": "Tumblr",
+                        "Snapchat": "Snapchat",
+                        "Google+": "Google+"
+                    },
+                    "default_value": false,
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "return_format": "value",
+                    "placeholder": "",
+                    "parent_repeater": "field_5a0373fcf8afd",
+                    "create_options": 0,
+                    "save_options": 0
+                },
+                {
+                    "key": "field_5a037545f8aff",
+                    "label": "Social Media Link",
+                    "name": "social_media_link",
+                    "aria-label": "",
+                    "type": "url",
+                    "instructions": "Enter the URL of the social media site selected previously.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "Social Media URL",
+                    "parent_repeater": "field_5a0373fcf8afd"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "sm-directory"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "s_m_directory"
+            }
+        ]
+    ],
+    "menu_order": 5,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1750959308
+}
