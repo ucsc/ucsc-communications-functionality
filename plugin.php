@@ -47,7 +47,7 @@ if ( ! function_exists( 'ucsccomms_enqueue_admin_styles' ) ) {
 		$current_screen = get_current_screen();
 		$plugin_data    = get_plugin_data( UCSCCOMMS_PLUGIN_DIR . '/plugin.php' );
 		$plugin_version = $plugin_data['Version'];
-		if ( strpos( $current_screen->base, 'ucsc-giving-functionality-settings' ) === false ) {
+		if ( strpos( $current_screen->base, 'ucsc-communications-functionality-settings' ) === false ) {
 			return;
 		}
 		wp_register_style( 'ucsccomms-cf-admin-settings', $settings_css, '', $plugin_version );
