@@ -83,7 +83,7 @@ function ucsccomms_style_guide_search_template( $template ) {
 
 add_action( 'search_template', 'ucsccomms_style_guide_search_template' );
 
-function custom_filter_posts( $query ) {
+function ucsccomms_custom_filter_posts( $query ) {
     if ( ! is_admin() && $query->is_main_query() && is_search() && 'a_z_style_guide' === get_query_var( 'post_type' ) ) {
         // Only proceed if there's a search term
         if ( ! empty( $query->query_vars['s'] ) ) {
@@ -125,4 +125,4 @@ function custom_filter_posts( $query ) {
         }
     }
 }
-add_action( 'pre_get_posts', 'custom_filter_posts' );
+add_action( 'pre_get_posts', 'ucsccomms_custom_filter_posts' );
