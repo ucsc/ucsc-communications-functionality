@@ -5,23 +5,26 @@ on:
         tags:
             - 'v*.*.*'
             - 'v*.*.*-rc.*'
-
+        
 permissions:
     contents: write
 
 jobs:
-    deploy:
+    build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v3
-            # - uses: actions/setup-node@v3.3.0
-            #   with:
-            #       node-version: 20
-            #       cache: 'npm'
-                  
+            - uses: actions/checkout@v4.2.2
+            - uses: actions/setup-node@v3.9.1
+              with:
+                  node-version: 20
+                  cache: 'npm'
+
             - name: Install Node dependencies
               run: npm install
+              
+            - name: Build plugin assets
+              run: ./node_modules/.bin/wp-scripts build
 
             - name: Package plugin
               run: ./node_modules/.bin/wp-scripts plugin-zip
@@ -29,5 +32,5 @@ jobs:
             - name: Release
               uses: softprops/action-gh-release@v1
               with:
-                  files: ucsc-communications-functionality-plugin.zip
+                  files: ucsc-communications-functionality.zip
                   generate_release_notes: true
