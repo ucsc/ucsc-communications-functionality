@@ -43,11 +43,11 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 		<ul>
 			<li><strong>Shortcodes:</strong>
 				<ul>
-					<li><code>[site-search]</code>: Inserts the HTML script tag to display <strong>Google Site Search</strong> results on a page</li>
-					<li><code>[copyright]</code>: Displays copyright symbol and year (<?php echo do_shortcode('[copyright]')?>)</li>
-					<li><code>[last-modified]</code>: Displays the <i>last modified</i> date of a page</li>
+					<li><code>[style-definition]</code>: Displays the style definitions for each Editorial Style Guide post type</li>
+					<li><code>[style-archive]</code>: Displays a loop of the style guide posts on the Editorial Style Guide page</li>
 				</ul>
 			</li>
+            <li><strong>ACF JSON:</strong> Saves and loads ACF field groups to/from the plugin's <code>acf-json</code> folder</li>
 		</ul>
 		</div>
 		<?php
