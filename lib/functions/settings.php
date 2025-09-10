@@ -41,7 +41,6 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 		<hr>
 		<h3>Features added by this plugin:</h3>
 		<ul>
-			<li><strong>Google Analytics 4</strong> and <strong>Site Improve</strong> scripts to site footer</li>
 			<li><strong>Shortcodes:</strong>
 				<ul>
 					<li><code>[site-search]</code>: Inserts the HTML script tag to display <strong>Google Site Search</strong> results on a page</li>

@@ -126,3 +126,49 @@ function ucsccomms_custom_filter_posts( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'ucsccomms_custom_filter_posts' );
+
+/**
+ * Callback function to retrieve custom template content
+ *
+ * @param $template
+ * @parameter $template
+ * @return $template
+ * @package ucsc-communications-functionality
+ */
+function ucsccomms_get_template_content( $template ) {
+	ob_start();
+	include UCSCCOMMS_PLUGIN_DIR . "/lib/templates/{$template}";
+	return ob_get_clean();
+}
+
+/**
+ * Register Style Guide block templates
+ *
+ * @return void
+ * @package ucsc-communications-functionality
+ */
+function ucsccomms_register_block_templates() {
+	$templates = array(
+		'archive-a_z_style_guide'       => array(
+			'title'       => __( 'Style Guide Archives', 'ucsccomms' ),
+			'description' => __( 'Displays the archive template for Style Guides.', 'ucsccomms' ),
+		),
+		'single-a_z_style_guide'        => array(
+			'title'       => __( 'Single Style Guide Posts', 'ucsccomms' ),
+			'description' => __( 'Displays the single post template for Style Guides.', 'ucsccomms' ),
+		),
+	);
+
+	foreach ( $templates as $slug => $data ) {
+		register_block_template(
+			'ucscgiving//' . $slug,
+			array(
+				'title'       => $data['title'],
+				'description' => $data['description'],
+				'content'     => ucsccomms_get_template_content( $slug . '.php' ),
+			)
+		);
+	}
+}
+
+// add_action( 'init', 'ucsccomms_register_block_templates' );
