@@ -12,9 +12,9 @@
   },
   "license": "ISC",
   "author": "UCSC",
-  "type": "commonjs",
   "main": "index.js",
   "directories": {
+    "acf-json": "acf-json",
     "lib": "lib"
   },
   "scripts": {
