@@ -1,0 +1,30 @@
+{
+    "name": "ucsc/ucsc-communications-functionality",
+    "description": "UCSC Comms Functionality",
+    "type": "project",
+
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+        "wp-coding-standards/wpcs": "^3.1"
+    },
+		"scripts": {
+			"lint": "./vendor/bin/phpcs",
+			"lint-fix": "./vendor/bin/phpcbf --extensions=php ."
+		},
+		"config": {
+			"allow-plugins": {
+				"dealerdirect/phpcodesniffer-composer-installer": true
+			}
+		},
+    "autoload": {
+        "psr-4": {
+            "UCSC\\UcscCommunicationsFunctionality\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jason Chafin",
+            "email": "1000543+Herm71@users.noreply.github.com"
+        }
+    ]
+}

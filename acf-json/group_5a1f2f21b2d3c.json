@@ -1,0 +1,90 @@
+{
+    "key": "group_5a1f2f21b2d3c",
+    "title": "A-Z Editorial Style Guide",
+    "fields": [
+        {
+            "key": "field_5a1f2f21dd284",
+            "label": "Style Definitions",
+            "name": "style_definitions",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Enter editorial style definitions below.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_5a1f2f2203937",
+                    "label": "Editorial Style Item",
+                    "name": "editorial_style_item",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Enter editorial style item name here.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": "",
+                    "parent_repeater": "field_5a1f2f21dd284"
+                },
+                {
+                    "key": "field_5a1f2f22039c1",
+                    "label": "Editorial Style Definition",
+                    "name": "editorial_style_definition",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "Enter the style guide definition here.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0,
+                    "parent_repeater": "field_5a1f2f21dd284"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "a_z_style_guide"
+            }
+        ]
+    ],
+    "menu_order": 5,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1750961277
+}

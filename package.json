@@ -1,0 +1,54 @@
+{
+  "name": "ucsc-communications-functionality",
+  "version": "0.1.0",
+  "description": "UCSC Communications Site Custom Functionality Plugin",
+  "keywords": [
+    "WordPress",
+    "UCSC"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ucsc/ucsc-communications-functionality.git"
+  },
+  "license": "ISC",
+  "author": "UCSC",
+  "main": "index.js",
+  "directories": {
+    "acf-json": "acf-json",
+    "lib": "lib"
+  },
+  "scripts": {
+    "release": "standard-version",
+    "dryrun": "standard-version --dry-run",
+    "zip": "wp-scripts plugin-zip",
+    "packages-update": "wp-scripts packages-update"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.19.0",
+    "standard-version": "^9.5.0"
+},
+"files": [
+  "acf-json",
+  "lib",
+  "plugin.php",
+  "README.md",
+  "CHANGELOG.md",
+  "LICENSE"
+],
+"standard-version": {
+  "bumpFiles": [
+    {
+      "filename": "package-lock.json",
+      "type": "json"
+    },
+    {
+      "filename": "package.json",
+      "type": "json"
+    },
+    {
+      "filename": "plugin.php",
+      "updater": "wp-plugin-version-updater.js"
+    }
+  ]
+  }
+}
