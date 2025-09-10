@@ -50,5 +50,8 @@
         "updater": "wp-plugin-version-updater.js"
       }
     ]
+  },
+  "dependencies": {
+    "synckit": "^0.11.11"
   }
 }
