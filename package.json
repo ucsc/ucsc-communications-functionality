@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.19.0",
+    "eslint-config-prettier": "^10.1.8",
     "standard-version": "^9.5.0"
   },
   "files": [
