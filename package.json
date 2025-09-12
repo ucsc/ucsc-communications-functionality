@@ -26,7 +26,8 @@
   "devDependencies": {
     "@wordpress/scripts": "^30.19.0",
     "eslint-config-prettier": "^10.1.8",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "synckit": "^0.11.11"
   },
   "files": [
     "acf-json",
@@ -51,8 +52,5 @@
         "updater": "wp-plugin-version-updater.js"
       }
     ]
-  },
-  "dependencies": {
-    "synckit": "^0.11.11"
   }
 }
