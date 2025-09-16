@@ -24,7 +24,7 @@
     "packages-update": "wp-scripts packages-update"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^30.19.0",
+    "@wordpress/scripts": "^30.23.0",
     "standard-version": "^9.5.0"
   },
   "files": [
