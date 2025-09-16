@@ -1,6 +1,6 @@
 {
   "name": "ucsc-communications-functionality",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UCSC Communications Site Custom Functionality Plugin",
   "keywords": [
     "WordPress",
@@ -25,9 +25,7 @@
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.19.0",
-    "eslint-config-prettier": "^10.1.8",
-    "standard-version": "^9.5.0",
-    "synckit": "^0.11.11"
+    "standard-version": "^9.5.0"
   },
   "files": [
     "acf-json",
