@@ -32,21 +32,34 @@ add_action( 'admin_menu', 'ucsccomms_add_settings_page' );
 
 if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 	function ucsccomms_render_plugin_settings_page() {
-		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/ucsc-communications-functionality/plugin.php');
+		$plugin_file = UCSCCOMMS_PLUGIN_DIR . 'plugin.php';
+		$plugin_data = file_exists( $plugin_file ) ? get_plugin_data( $plugin_file ) : array();
+		$plugin_name    = ! empty( $plugin_data['Name'] ) ? $plugin_data['Name'] : '';
+		$plugin_version = ! empty( $plugin_data['Version'] ) ? $plugin_data['Version'] : '';
+		$plugin_desc    = ! empty( $plugin_data['Description'] ) ? $plugin_data['Description'] : '';
 		?>
 		<div class="wrap cf-admin-settings-page">
-		<h1><?php echo esc_html( $plugin_data['Name'] ); ?></h1>
-		<h2>Version: <?php echo esc_html( $plugin_data['Version'] ); ?> <a href="https://github.com/ucsc/ucsc-communications-functionality/releases">(release notes)</a></h2>
-		<p><?php echo wp_kses_post( $plugin_data['Description'] ); ?></p>
+		<h1><?php echo esc_html( $plugin_name ); ?></h1>
+		<h2><?php echo esc_html( __( 'Version:', 'ucsccomms' ) ); ?> <?php echo esc_html( $plugin_version ); ?> <a href="https://github.com/ucsc/ucsc-communications-functionality/releases"><?php echo esc_html( __( '(release notes)', 'ucsccomms' ) ); ?></a></h2>
+		<p><?php echo wp_kses_post( $plugin_desc ); ?></p>
 		<hr>
-		<h3>Features added by this plugin</h3>
-		<h4>Shortcodes</h4>
+		<h3><?php echo esc_html( __( 'Features added by this plugin', 'ucsccomms' ) ); ?></h3>
+		<h4><?php echo esc_html( __( 'Shortcodes', 'ucsccomms' ) ); ?></h4>
 		<ul>
-			<li><code>[style-definition]</code> — Displays the style definitions for each Editorial Style Guide post.</li>
-			<li><code>[style-archive]</code> — Displays a loop of all Editorial Style Guide posts on an archive page.</li>
+			<li><code>[style-definition]</code> — <?php echo esc_html( __( 'Displays the style definitions for each Editorial Style Guide post.', 'ucsccomms' ) ); ?></li>
+			<li><code>[style-archive]</code> — <?php echo esc_html( __( 'Displays a loop of all Editorial Style Guide posts on an archive page.', 'ucsccomms' ) ); ?></li>
 		</ul>
-		<h4>ACF JSON</h4>
-		<p>Field group definitions are saved to and loaded from the plugin's <code>acf-json</code> folder, which supports version control and syncing alongside ACF's database storage.</p>
+		<h4><?php echo esc_html( __( 'ACF JSON', 'ucsccomms' ) ); ?></h4>
+		<p><?php
+			printf(
+				wp_kses(
+					/* translators: %s: acf-json folder name in code tags */
+					__( "Field group definitions are saved to and loaded from the plugin's %s folder, which supports version control and syncing alongside ACF's database storage.", 'ucsccomms' ),
+					array( 'code' => array() )
+				),
+				'<code>acf-json</code>'
+			);
+		?></p>
 		</div>
 		<?php
 	}
