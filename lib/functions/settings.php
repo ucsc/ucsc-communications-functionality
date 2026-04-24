@@ -35,20 +35,18 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/ucsc-communications-functionality/plugin.php');
 		?>
 		<div class="wrap cf-admin-settings-page">
-		<h1><?php echo $plugin_data['Name']; ?></h1>
-		<h2>Version: <?php echo $plugin_data['Version']; ?> <a href="https://github.com/ucsc/ucsc-communications-functionality/releases">(release notes)</a></h2>
-		<p><?php echo $plugin_data['Description']; ?></p>
+		<h1><?php echo esc_html( $plugin_data['Name'] ); ?></h1>
+		<h2>Version: <?php echo esc_html( $plugin_data['Version'] ); ?> <a href="https://github.com/ucsc/ucsc-communications-functionality/releases">(release notes)</a></h2>
+		<p><?php echo wp_kses_post( $plugin_data['Description'] ); ?></p>
 		<hr>
-		<h3>Features added by this plugin:</h3>
+		<h3>Features added by this plugin</h3>
+		<h4>Shortcodes</h4>
 		<ul>
-			<li><strong>Shortcodes:</strong>
-				<ul>
-					<li><code>[style-definition]</code>: Displays the style definitions for each Editorial Style Guide post type</li>
-					<li><code>[style-archive]</code>: Displays a loop of the style guide posts on the Editorial Style Guide page</li>
-				</ul>
-			</li>
-            <li><strong>ACF JSON:</strong> Saves and loads ACF field groups to/from the plugin's <code>acf-json</code> folder</li>
+			<li><code>[style-definition]</code> — Displays the style definitions for each Editorial Style Guide post.</li>
+			<li><code>[style-archive]</code> — Displays a loop of all Editorial Style Guide posts on an archive page.</li>
 		</ul>
+		<h4>ACF JSON</h4>
+		<p>Field group definitions are saved to and loaded from the plugin's <code>acf-json</code> folder, keeping them version-controlled rather than stored in the database.</p>
 		</div>
 		<?php
 	}
