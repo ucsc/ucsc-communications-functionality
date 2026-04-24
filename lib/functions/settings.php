@@ -40,7 +40,7 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 		?>
 		<div class="wrap cf-admin-settings-page">
 		<h1><?php echo esc_html( $plugin_name ); ?></h1>
-		<h2><?php echo esc_html( __( 'Version:', 'ucsccomms' ) ); ?> <?php echo esc_html( $plugin_version ); ?> <a href="https://github.com/ucsc/ucsc-communications-functionality/releases"><?php echo esc_html( __( '(release notes)', 'ucsccomms' ) ); ?></a></h2>
+		<h2><?php echo esc_html( __( 'Version:', 'ucsccomms' ) ); ?> <?php echo esc_html( $plugin_version ); ?> <a href="<?php echo esc_url( 'https://github.com/ucsc/ucsc-communications-functionality/releases' ); ?>"><?php echo esc_html( __( '(release notes)', 'ucsccomms' ) ); ?></a></h2>
 		<p><?php echo wp_kses_post( $plugin_desc ); ?></p>
 		<hr>
 		<h3><?php echo esc_html( __( 'Features added by this plugin', 'ucsccomms' ) ); ?></h3>
@@ -51,13 +51,13 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 		</ul>
 		<h4><?php echo esc_html( __( 'ACF JSON', 'ucsccomms' ) ); ?></h4>
 		<p><?php
-			printf(
-				wp_kses(
+			echo wp_kses(
+				sprintf(
 					/* translators: %s: acf-json folder name in code tags */
 					__( "Field group definitions are saved to and loaded from the plugin's %s folder, which supports version control and syncing alongside ACF's database storage.", 'ucsccomms' ),
-					array( 'code' => array() )
+					'<code>acf-json</code>'
 				),
-				'<code>acf-json</code>'
+				array( 'code' => array() )
 			);
 		?></p>
 		</div>
