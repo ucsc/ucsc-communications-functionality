@@ -46,7 +46,7 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 			<li><code>[style-archive]</code> — Displays a loop of all Editorial Style Guide posts on an archive page.</li>
 		</ul>
 		<h4>ACF JSON</h4>
-		<p>Field group definitions are saved to and loaded from the plugin's <code>acf-json</code> folder, keeping them version-controlled rather than stored in the database.</p>
+		<p>Field group definitions are saved to and loaded from the plugin's <code>acf-json</code> folder, which supports version control and syncing alongside ACF's database storage.</p>
 		</div>
 		<?php
 	}
