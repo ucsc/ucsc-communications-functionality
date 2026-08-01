@@ -10,7 +10,7 @@ issue; none have been fixed yet.
 |---|-------|------|
 | 1 | [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9) | Admin settings CSS never loads |
 | 2 | [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10) | `wp_reset_postdata()` unreachable |
-| 3 | [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11) | `composer run lint` fails |
+| 3 | [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11) | ~~`composer run lint` fails~~ ✅ |
 | 4 | [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12) | Shortcode output not escaped |
 | 5 | [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13) | No direct-access guards |
 | 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | Stale duplicate plugin header |
@@ -61,24 +61,24 @@ loop closes.
 
 ---
 
-### 3. `composer run lint` fails outright
-**Status:** Open — [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11)
+### 3. ~~`composer run lint` fails outright~~
+**Status:** ✅ Fixed — [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11)
 **File:** `.phpcs.xml.dist`
 
-The ruleset declares no `<file>` element, so PHPCS exits with:
+The ruleset declared no `<file>` element, so PHPCS exited with "You must supply
+at least one file or directory to process." The config was upstream boilerplate,
+named `"Example Project"` and excluding `/docroot/…` paths that do not exist in
+this repo.
 
-```
-ERROR: You must supply at least one file or directory to process.
-```
+**Fixed by:** adding `<file>plugin.php</file>` and `<file>lib/</file>`, dropping
+the `/docroot/` excludes, renaming the ruleset, restricting scanning to
+`extensions="php"`, adding `basepath`/`parallel`/`colors`/`sp` args, and raising
+`minimum_supported_wp_version` from `4.9` to `6.1` to match the plugin header.
+`composer lint-fix` was also simplified from `phpcbf --extensions=php .` to plain
+`phpcbf`, so both scripts now honour the same ruleset.
 
-The config is still upstream boilerplate — it is named `"Example Project"` and
-excludes `/docroot/…` paths that do not exist in this repo. Both `lint` and
-`lint-fix` are unusable as documented.
-
-**Fix:** Add `<file>plugin.php</file>` and `<file>lib/</file>`, drop the
-`/docroot/` excludes, and rename the ruleset. Consider also raising
-`minimum_supported_wp_version` (currently `4.9`) to match the `Requires at
-least: 6.1` plugin header.
+**Note:** `composer run lint` still exits non-zero — that is the violation
+backlog in item 9, not a config fault.
 
 ---
 
@@ -165,10 +165,11 @@ trailing space.
 ### 9. PHPCS formatting backlog
 **Status:** Open — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
 
-Once `.phpcs.xml.dist` is usable (item 3), a full run reports **113 errors**
-across the plugin, **98 of them auto-fixable** by `phpcbf` — concentrated in
-`shortcodes.php` (missing docblocks, spacing, camelCase locals such as
-`$azItem` / `$azDef` / `$azDir` against WordPress naming conventions).
+Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **103
+errors and 11 warnings**, **88 of them auto-fixable** by `phpcbf` — concentrated
+in `shortcodes.php` (missing docblocks, spacing, camelCase locals such as
+`$azItem` / `$azDef` / `$azDir` against WordPress naming conventions). This is
+why `composer run lint` exits non-zero today.
 
 **Fix:** Run `composer run lint-fix`, then hand-resolve the remainder. Best done
 as its own commit so the mechanical reformatting does not obscure the

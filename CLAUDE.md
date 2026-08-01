@@ -10,13 +10,12 @@ composer run lint        # PHP CodeSniffer (WordPress-Extra + WordPress-Docs sta
 composer run lint-fix    # Auto-fix PHPCS violations
 ```
 
-⚠️ **Both currently fail.** `.phpcs.xml.dist` declares no `<file>` element, so PHPCS
-exits with "You must supply at least one file or directory to process." Until that is
-fixed (see [ROADMAP.md](ROADMAP.md) item 3), pass paths explicitly:
+`.phpcs.xml.dist` scans `plugin.php` and `lib/` (PHP only), so no paths are needed.
 
-```bash
-./vendor/bin/phpcs plugin.php lib/
-```
+⚠️ `composer run lint` **currently exits non-zero** — roughly 100 pre-existing violations,
+most of them auto-fixable formatting in `shortcodes.php`. That backlog is tracked in
+[ROADMAP.md](ROADMAP.md) item 9; it is not a config problem. Don't treat a non-zero exit
+as a regression until that is cleared.
 
 ### Release & Packaging
 ```bash
@@ -65,7 +64,6 @@ fixed* — do not assume the code in these areas is correct:
 - `lib/functions/shortcodes.php` — ACF values and post titles are concatenated into
   returned HTML without escaping. PHPCS will not flag this; its `EscapeOutput` sniff only
   inspects `echo`/`print`, not returned strings.
-- `.phpcs.xml.dist` — unusable as-is (see Commands above).
 - No `defined( 'ABSPATH' ) || exit;` guards in any PHP file.
 
 ## Known quirks

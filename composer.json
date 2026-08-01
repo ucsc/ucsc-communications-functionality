@@ -9,7 +9,7 @@
     },
 		"scripts": {
 			"lint": "./vendor/bin/phpcs",
-			"lint-fix": "./vendor/bin/phpcbf --extensions=php ."
+			"lint-fix": "./vendor/bin/phpcbf"
 		},
 		"config": {
 			"allow-plugins": {
