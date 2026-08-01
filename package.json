@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/ucsc/ucsc-communications-functionality.git"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "author": "UCSC",
   "main": "index.js",
   "directories": {
