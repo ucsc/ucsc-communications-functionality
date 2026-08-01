@@ -68,8 +68,9 @@ Simple informational page under **Settings** showing plugin version (linked to G
 **See [ROADMAP.md](ROADMAP.md) for the full list.** These are documented but *not yet
 fixed* — do not assume the code in these areas is correct:
 
-- No `defined( 'ABSPATH' ) || exit;` guards in any PHP file.
-- `plugin.php` — the `Update URI` header points at a repo name that doesn't exist.
+- `lib/functions/shortcodes.php` and `lib/functions/settings.php` carry the bulk of the
+  outstanding PHPCS violations ([ROADMAP.md](ROADMAP.md) item 9), so `composer run lint`
+  exits non-zero. Nothing else is known-broken.
 
 ## Known quirks
 
