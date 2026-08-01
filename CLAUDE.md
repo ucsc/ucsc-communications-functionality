@@ -52,6 +52,11 @@ Field group definitions live in `acf-json/`. The plugin filters `acf/settings/sa
 - `[style-definition]` — renders the `style_definitions` repeater for the current post
 - `[style-archive]` — queries all `a_z_style_guide` posts and renders their definitions
 
+Both build and *return* an HTML string rather than echoing it. Escape at the point of
+concatenation — `esc_html()` for the text sub-field and post title, `wp_kses_post()` for
+the WYSIWYG sub-field. PHPCS cannot check this: `WordPress.Security.EscapeOutput` only
+inspects `echo`/`print`, so unescaped values in a returned string lint clean.
+
 ### Admin settings page (`lib/functions/settings.php`)
 Simple informational page under **Settings** showing plugin version (linked to GitHub releases) and feature list. Requires `manage_options` capability.
 
@@ -63,12 +68,8 @@ Simple informational page under **Settings** showing plugin version (linked to G
 **See [ROADMAP.md](ROADMAP.md) for the full list.** These are documented but *not yet
 fixed* — do not assume the code in these areas is correct:
 
-- `lib/functions/shortcodes.php:75` — `wp_reset_postdata()` sits after `return` and never
-  runs, leaving the global `$post` clobbered after `[style-archive]`.
-- `lib/functions/shortcodes.php` — ACF values and post titles are concatenated into
-  returned HTML without escaping. PHPCS will not flag this; its `EscapeOutput` sniff only
-  inspects `echo`/`print`, not returned strings.
 - No `defined( 'ABSPATH' ) || exit;` guards in any PHP file.
+- `plugin.php` — the `Update URI` header points at a repo name that doesn't exist.
 
 ## Known quirks
 

@@ -9,11 +9,11 @@ issue. Fixed items are struck through below and kept for context.
 | # | Issue | Item |
 |---|-------|------|
 | 1 | [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9) | ~~Admin settings CSS never loads~~ ✅ |
-| 2 | [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10) | `wp_reset_postdata()` unreachable |
+| 2 | [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10) | ~~`wp_reset_postdata()` unreachable~~ ✅ |
 | 3 | [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11) | ~~`composer run lint` fails~~ ✅ |
-| 4 | [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12) | Shortcode output not escaped |
+| 4 | [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12) | ~~Shortcode output not escaped~~ ✅ |
 | 5 | [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13) | No direct-access guards |
-| 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | Stale duplicate plugin header |
+| 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | ~~Stale duplicate plugin header~~ ✅ |
 | 7 | [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15) | ~~`get_plugin_data()` on every admin page~~ ✅ |
 | 8 | [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16) | `Update URI` points at wrong repo |
 | 9 | [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17) | PHPCS formatting backlog |
@@ -38,23 +38,17 @@ than from the including file.
 
 ---
 
-### 2. `wp_reset_postdata()` is unreachable in `[style-archive]`
-**Status:** Open — [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10)
-**File:** `lib/functions/shortcodes.php:73-75`
+### 2. ~~`wp_reset_postdata()` is unreachable in `[style-archive]`~~
+**Status:** ✅ Fixed — [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10)
+**File:** `lib/functions/shortcodes.php`
 
-```php
-return $finalloop;
+`wp_reset_postdata()` sat *after* `return $finalloop;`, so it never executed. The
+custom `WP_Query` loop calls `the_post()`, which overwrites the global `$post`,
+and without the reset any template content rendered after the shortcode on the
+same page saw the wrong post context (wrong title, permalink, fields).
 
-wp_reset_postdata();   // never executes
-```
-
-The custom `WP_Query` loop calls `the_post()`, which overwrites the global
-`$post`. Because the reset never runs, any template content rendered after the
-shortcode on the same page sees the wrong post context (wrong title, permalink,
-fields).
-
-**Fix:** Move `wp_reset_postdata()` above the `return`, immediately after the
-loop closes.
+**Fixed by:** moving the call inside the `if` block, immediately after the loop
+closes and before the `return`.
 
 ---
 
@@ -81,25 +75,27 @@ backlog in item 9, not a config fault.
 
 ## P2 — Security baseline
 
-### 4. Shortcode output is not escaped
-**Status:** Open — [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12)
-**File:** `lib/functions/shortcodes.php:27, 60, 67`
+### 4. ~~Shortcode output is not escaped~~
+**Status:** ✅ Fixed — [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12)
+**File:** `lib/functions/shortcodes.php`
 
-ACF field values and the post title are concatenated raw into returned HTML:
+ACF field values and the post title were concatenated raw into returned HTML:
 
 ```php
 $finaldefs .= '<p><b>'.$azItem.':</b></p>'.$azDef.'<hr>';
 ```
 
-Editors with `unfiltered_html` (or any future change to who can edit these
-posts) can inject arbitrary markup into every page using the shortcodes.
+Editors with `unfiltered_html` — or any future change to who can edit these
+posts — could inject arbitrary markup into every page using the shortcodes.
 
-**Fix:** `esc_html()` for `$azItem` and the post title; `wp_kses_post()` for
-`$azDef`, which is a WYSIWYG field and legitimately contains markup.
+**Fixed by:** `esc_html()` on `$azItem` and the post title; `wp_kses_post()` on
+`$azDef`, which is a WYSIWYG field and legitimately contains markup, so it gets
+the same allowlist as post content rather than being flattened.
 
-**Note:** PHPCS does not catch these. The `WordPress.Security.EscapeOutput`
-sniff only inspects `echo`/`print`, not values accumulated into a returned
-string — so this class of bug needs review, not just linting.
+**Note:** PHPCS did not catch these and will not catch a regression. The
+`WordPress.Security.EscapeOutput` sniff only inspects `echo`/`print`, not values
+accumulated into a returned string — this class of bug needs review, not just
+linting.
 
 ---
 
@@ -115,16 +111,15 @@ None of the PHP files guard against direct HTTP access.
 
 ## P3 — Structure and hygiene
 
-### 6. Stale duplicate plugin header in `shortcodes.php`
-**Status:** Open — [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14)
-**File:** `lib/functions/shortcodes.php:2-8`
+### 6. ~~Stale duplicate plugin header in `shortcodes.php`~~
+**Status:** ✅ Fixed — [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14)
+**File:** `lib/functions/shortcodes.php`
 
-The file opens with a second `Plugin Name:` header block declaring
+The file opened with a second `Plugin Name:` header block declaring
 `Version: 0.1.0`. Only the main bootstrap should carry a plugin header; this one
-is stale and misleading (and confuses tooling that scans for plugin entry
-points).
+was stale, misleading, and confused tooling that scans for plugin entry points.
 
-**Fix:** Replace with a normal file docblock matching `general.php` and
+**Fixed by:** replacing it with a normal file docblock matching `general.php` and
 `settings.php`, including the `@package` tag PHPCS wants.
 
 ---
@@ -166,8 +161,8 @@ trailing space.
 ### 9. PHPCS formatting backlog
 **Status:** Open — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
 
-Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **102
-errors and 11 warnings**, **87 of them auto-fixable** by `phpcbf` — concentrated
+Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **89
+errors and 8 warnings**, **73 of them auto-fixable** by `phpcbf` — concentrated
 in `shortcodes.php` (missing docblocks, spacing, camelCase locals such as
 `$azItem` / `$azDef` / `$azDir` against WordPress naming conventions). This is
 why `composer run lint` exits non-zero today.
