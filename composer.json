@@ -2,6 +2,7 @@
     "name": "ucsc/ucsc-communications-functionality",
     "description": "UCSC Comms Functionality",
     "type": "project",
+    "license": "GPL-3.0-or-later",
 
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
