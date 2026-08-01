@@ -13,9 +13,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Register new menu and page */
-
 if ( ! function_exists( 'ucsccomms_add_settings_page' ) ) {
+	/**
+	 * Register the plugin's page under the Settings menu.
+	 *
+	 * @return void
+	 */
 	function ucsccomms_add_settings_page() {
 		add_options_page( 'UCSC Communications Functionality plugin page', 'UCSC Communications Functionality', 'manage_options', 'ucsc-communications-functionality-settings', 'ucsccomms_render_plugin_settings_page' );
 	}
@@ -23,15 +26,17 @@ if ( ! function_exists( 'ucsccomms_add_settings_page' ) ) {
 add_action( 'admin_menu', 'ucsccomms_add_settings_page' );
 
 
-/**
- * HTML output of Settings page
- *
- * note: This page typically displays a form for displaying any settings options.
- * It is not needed at this point.
- * https://developer.wordpress.org/plugins/settings/custom-settings-page/
- */
-
 if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
+	/**
+	 * Render the HTML output of the settings page.
+	 *
+	 * Note: such a page typically displays a form for editing settings options.
+	 * That is not needed at this point, so this is informational only.
+	 *
+	 * @link https://developer.wordpress.org/plugins/settings/custom-settings-page/
+	 *
+	 * @return void
+	 */
 	function ucsccomms_render_plugin_settings_page() {
 		$plugin_file    = UCSCCOMMS_PLUGIN_DIR . 'plugin.php';
 		$plugin_data    = file_exists( $plugin_file ) ? get_plugin_data( $plugin_file ) : array();

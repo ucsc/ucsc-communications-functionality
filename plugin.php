@@ -38,11 +38,10 @@ if ( file_exists( UCSCCOMMS_PLUGIN_DIR . '/lib/functions/shortcodes.php' ) ) {
 }
 
 /**
- * ACF JSON Save Point
+ * Point ACF at this plugin's acf-json directory when saving field groups.
  *
- * @param [type] $path
- * @return $path
- * @package ucsc-communications-functionality
+ * @param string $path Default save path supplied by ACF.
+ * @return string Path to this plugin's acf-json directory.
  */
 function ucsccomms_acf_json_save_point( $path ) {
 	$path = UCSCCOMMS_PLUGIN_DIR . 'acf-json';
@@ -52,11 +51,13 @@ function ucsccomms_acf_json_save_point( $path ) {
 add_filter( 'acf/settings/save_json', 'ucsccomms_acf_json_save_point' );
 
 /**
- * ACF JSON Load Point
+ * Point ACF at this plugin's acf-json directory when loading field groups.
  *
- * @param [type] $paths
- * @return $paths
- * @package ucsc-giving-functionality
+ * Drops ACF's default load path so field groups come from this plugin rather
+ * than the active theme.
+ *
+ * @param array $paths Default load paths supplied by ACF.
+ * @return array Load paths with this plugin's acf-json directory appended.
  */
 function ucsccomms_acf_json_load_point( $paths ) {
 	unset( $paths[0] );
