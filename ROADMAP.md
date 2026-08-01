@@ -4,17 +4,17 @@ Known issues and planned work for the UCSC Communications Custom Functionality p
 
 Findings below came from an audit against the WordPress Plugin Handbook baseline
 (structure, lifecycle, Settings API, security). Every item is tracked by a GitHub
-issue; none have been fixed yet.
+issue. Fixed items are struck through below and kept for context.
 
 | # | Issue | Item |
 |---|-------|------|
-| 1 | [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9) | Admin settings CSS never loads |
+| 1 | [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9) | ~~Admin settings CSS never loads~~ ✅ |
 | 2 | [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10) | `wp_reset_postdata()` unreachable |
 | 3 | [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11) | ~~`composer run lint` fails~~ ✅ |
 | 4 | [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12) | Shortcode output not escaped |
 | 5 | [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13) | No direct-access guards |
 | 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | Stale duplicate plugin header |
-| 7 | [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15) | `get_plugin_data()` on every admin page |
+| 7 | [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15) | ~~`get_plugin_data()` on every admin page~~ ✅ |
 | 8 | [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16) | `Update URI` points at wrong repo |
 | 9 | [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17) | PHPCS formatting backlog |
 
@@ -22,22 +22,19 @@ issue; none have been fixed yet.
 
 ## P1 — Bugs (silently broken today)
 
-### 1. Admin settings CSS never loads
-**Status:** Open — [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9)
-**File:** `lib/functions/general.php:24`
+### 1. ~~Admin settings CSS never loads~~
+**Status:** ✅ Fixed — [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9)
+**File:** `lib/functions/general.php`
 
-`plugin_dir_url( __FILE__ )` resolves to `…/lib/functions/`, and the code then
-appends `lib/css/admin-settings.css`, producing:
+`plugin_dir_url( __FILE__ )` resolved to `…/lib/functions/`, and the code then
+appended `lib/css/admin-settings.css`, producing
+`…/lib/functions/lib/css/admin-settings.css`. The stylesheet lives at
+`lib/css/admin-settings.css`, so the enqueue 404'd and the settings page
+rendered unstyled.
 
-```
-…/lib/functions/lib/css/admin-settings.css
-```
-
-The stylesheet actually lives at `lib/css/admin-settings.css`, so the enqueue
-resolves to a 404 and the settings page renders unstyled.
-
-**Fix:** Build the URL from the plugin root, e.g. define a `UCSCCOMMS_PLUGIN_URL`
-constant in `plugin.php` alongside `UCSCCOMMS_PLUGIN_DIR` and use it here.
+**Fixed by:** adding a `UCSCCOMMS_PLUGIN_URL` constant in `plugin.php` alongside
+`UCSCCOMMS_PLUGIN_DIR`, and building the asset URL from the plugin root rather
+than from the including file.
 
 ---
 
@@ -132,17 +129,21 @@ points).
 
 ---
 
-### 7. `get_plugin_data()` runs on every admin page load
-**Status:** Open — [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15)
-**File:** `lib/functions/general.php:26-30`
+### 7. ~~`get_plugin_data()` runs on every admin page load~~
+**Status:** ✅ Fixed — [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15)
+**File:** `lib/functions/general.php`
 
-`get_plugin_data()` reads and parses `plugin.php` from disk before the
-`$current_screen` check bails out, so the cost is paid on every single admin
-screen rather than only on the plugin's settings page.
+`get_plugin_data()` read and parsed `plugin.php` from disk before the
+`$current_screen` check bailed out, so the cost was paid on every admin screen
+rather than only on the plugin's settings page.
 
-**Fix:** Move the early return above the `get_plugin_data()` call. While there,
-guard against `get_current_screen()` returning `null`, and pass `array()`
-rather than `''` as the `$deps` argument to `wp_register_style()`.
+**Fixed by:** moving both early returns above the `get_plugin_data()` call,
+guarding against `get_current_screen()` returning `null` (via an
+`instanceof WP_Screen` check), passing `array()` rather than `''` as the
+`$deps` argument to `wp_register_style()`, and dropping a stray double slash in
+the `UCSCCOMMS_PLUGIN_DIR . '/plugin.php'` path.
+
+Fixed together with item 1, which touches the same function.
 
 ---
 
@@ -165,8 +166,8 @@ trailing space.
 ### 9. PHPCS formatting backlog
 **Status:** Open — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
 
-Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **103
-errors and 11 warnings**, **88 of them auto-fixable** by `phpcbf` — concentrated
+Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **102
+errors and 11 warnings**, **87 of them auto-fixable** by `phpcbf` — concentrated
 in `shortcodes.php` (missing docblocks, spacing, camelCase locals such as
 `$azItem` / `$azDef` / `$azDir` against WordPress naming conventions). This is
 why `composer run lint` exits non-zero today.

@@ -21,16 +21,24 @@ if ( ! function_exists( 'ucsccomms_enqueue_admin_styles' ) ) {
 	 * @package ucsc-communications-functionality
 	 */
 	function ucsccomms_enqueue_admin_styles(): void {
-		$settings_css   = plugin_dir_url( __FILE__ ) . 'lib/css/admin-settings.css';
 		$current_screen = get_current_screen();
-		$plugin_data    = get_plugin_data( UCSCCOMMS_PLUGIN_DIR . '/plugin.php' );
-		$plugin_version = $plugin_data['Version'];
+
+		// get_current_screen() returns null outside a real admin screen.
+		if ( ! $current_screen instanceof WP_Screen ) {
+			return;
+		}
+
+		// Bail before doing any work on every other admin page.
 		if ( strpos( $current_screen->base, 'ucsc-communications-functionality-settings' ) === false ) {
 			return;
 		}
-		wp_register_style( 'ucsccomms-cf-admin-settings', $settings_css, '', $plugin_version );
+
+		$plugin_data    = get_plugin_data( UCSCCOMMS_PLUGIN_DIR . 'plugin.php' );
+		$plugin_version = $plugin_data['Version'];
+		$settings_css   = UCSCCOMMS_PLUGIN_URL . 'lib/css/admin-settings.css';
+
+		wp_register_style( 'ucsccomms-cf-admin-settings', $settings_css, array(), $plugin_version );
 		wp_enqueue_style( 'ucsccomms-cf-admin-settings' );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'ucsccomms_enqueue_admin_styles' );
-

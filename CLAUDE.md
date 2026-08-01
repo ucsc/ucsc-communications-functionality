@@ -33,6 +33,12 @@ This is a single-purpose WordPress plugin that provides an **A-Z Editorial Style
 ### Core dependency
 **Advanced Custom Fields Pro** must be active. The plugin does not function without it.
 
+### Constants (defined in `plugin.php`)
+`UCSCCOMMS_PLUGIN_DIR` (filesystem path), `UCSCCOMMS_PLUGIN_URL` (URL), `UCSCCOMMS_PLUGIN_BASE`.
+Always build asset paths/URLs from these rather than from `__FILE__` in an included file —
+files under `lib/functions/` resolve relative to *that* directory, which is what broke the
+admin stylesheet enqueue previously.
+
 ### Custom Post Type
 `a_z_style_guide` ("Editorial Style Guide") — publicly queryable, searchable, non-hierarchical. Registered by ACF from `acf-json/post_type_685d7e97c87c6.json`, **not** in PHP — so it does not exist without ACF Pro active.
 
@@ -57,8 +63,6 @@ Simple informational page under **Settings** showing plugin version (linked to G
 **See [ROADMAP.md](ROADMAP.md) for the full list.** These are documented but *not yet
 fixed* — do not assume the code in these areas is correct:
 
-- `lib/functions/general.php:24` — admin CSS URL is built from `lib/functions/`, so the
-  stylesheet 404s and never loads.
 - `lib/functions/shortcodes.php:75` — `wp_reset_postdata()` sits after `return` and never
   runs, leaving the global `$post` clobbered after `[style-archive]`.
 - `lib/functions/shortcodes.php` — ACF values and post titles are concatenated into
