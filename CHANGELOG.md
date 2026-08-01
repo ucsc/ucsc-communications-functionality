@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.5](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.4...v1.0.5) (2026-08-01)
+
+
+### Bug Fixes
+
+* **meta:** correct the declared license to GPL-3.0-or-later ([3da0457](https://github.com/ucsc/ucsc-communications-functionality/commit/3da045711a040477fc3638391fef1c74f9a068fd))
+
 ## [1.0.4](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.3...v1.0.4) (2026-08-01)
 
 
