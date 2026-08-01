@@ -10,6 +10,14 @@ composer run lint        # PHP CodeSniffer (WordPress-Extra + WordPress-Docs sta
 composer run lint-fix    # Auto-fix PHPCS violations
 ```
 
+⚠️ **Both currently fail.** `.phpcs.xml.dist` declares no `<file>` element, so PHPCS
+exits with "You must supply at least one file or directory to process." Until that is
+fixed (see [ROADMAP.md](ROADMAP.md) item 3), pass paths explicitly:
+
+```bash
+./vendor/bin/phpcs plugin.php lib/
+```
+
 ### Release & Packaging
 ```bash
 npm run dryrun     # Preview version bump without committing
@@ -27,7 +35,7 @@ This is a single-purpose WordPress plugin that provides an **A-Z Editorial Style
 **Advanced Custom Fields Pro** must be active. The plugin does not function without it.
 
 ### Custom Post Type
-`a_z_style_guide` ("Editorial Style Guide") — publicly queryable, searchable, non-hierarchical. Registered in `plugin.php`.
+`a_z_style_guide` ("Editorial Style Guide") — publicly queryable, searchable, non-hierarchical. Registered by ACF from `acf-json/post_type_685d7e97c87c6.json`, **not** in PHP — so it does not exist without ACF Pro active.
 
 ### ACF JSON
 Field group definitions live in `acf-json/`. The plugin filters `acf/settings/save_json` and `acf/settings/load_json` so ACF reads/writes field definitions from this directory rather than the database — keeping them version-controlled.
@@ -45,6 +53,25 @@ Simple informational page under **Settings** showing plugin version (linked to G
 ### Namespace / autoloading
 `composer.json` defines PSR-4 autoloading: `UCSC\UcscCommunicationsFunctionality\` → `src/`. No `src/` directory exists yet; this is placeholder infrastructure. Current code uses procedural `require_once` includes.
 
+## Known issues
+
+**See [ROADMAP.md](ROADMAP.md) for the full list.** These are documented but *not yet
+fixed* — do not assume the code in these areas is correct:
+
+- `lib/functions/general.php:24` — admin CSS URL is built from `lib/functions/`, so the
+  stylesheet 404s and never loads.
+- `lib/functions/shortcodes.php:75` — `wp_reset_postdata()` sits after `return` and never
+  runs, leaving the global `$post` clobbered after `[style-archive]`.
+- `lib/functions/shortcodes.php` — ACF values and post titles are concatenated into
+  returned HTML without escaping. PHPCS will not flag this; its `EscapeOutput` sniff only
+  inspects `echo`/`print`, not returned strings.
+- `.phpcs.xml.dist` — unusable as-is (see Commands above).
+- No `defined( 'ABSPATH' ) || exit;` guards in any PHP file.
+
 ## Known quirks
 
 - No unit tests, no PHPStan config, no JS build pipeline (no blocks or interactive JS).
+- `composer.json` maps PSR-4 `UCSC\UcscCommunicationsFunctionality\` → `src/`, but no
+  `src/` directory exists; all current code is procedural `require_once` includes.
+- `lib/functions/shortcodes.php` carries a stale second plugin header (`Version: 0.1.0`)
+  that does not track the real plugin version.
