@@ -7,15 +7,17 @@
  * Requires at least: 6.1
  * Requires PHP:      7.0
  * Author:            UC Santa Cruz
- * Author URI:        https://github.com/ucsc 
+ * Author URI:        https://github.com/ucsc
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
- * Update URI:       https://github.com/ucsc/ucsc-communications-functionality-plugin/releases
+ * Update URI:        https://github.com/ucsc/ucsc-communications-functionality/releases
  * Requires Plugins:  advanced-custom-fields-pro
  * Text Domain:       ucsccomms
  *
  * @package           ucsc-communications-functionality
  */
+
+defined( 'ABSPATH' ) || exit;
 
 // Set plugin directory, URL and base name.
 define( 'UCSCCOMMS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Path to plugin directory.

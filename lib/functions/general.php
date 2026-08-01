@@ -11,6 +11,8 @@
  * @license      http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
+defined( 'ABSPATH' ) || exit;
+
 // Enqueue admin settings styles.
 if ( ! function_exists( 'ucsccomms_enqueue_admin_styles' ) ) {
 	/**

@@ -11,6 +11,7 @@
  * @license      http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Register the A-Z Editorial Style Guide shortcode.

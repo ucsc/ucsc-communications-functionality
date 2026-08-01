@@ -11,6 +11,8 @@
  * @license      http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /** Register new menu and page */
 
 if ( ! function_exists( 'ucsccomms_add_settings_page' ) ) {

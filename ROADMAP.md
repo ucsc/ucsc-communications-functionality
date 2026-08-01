@@ -12,10 +12,10 @@ issue. Fixed items are struck through below and kept for context.
 | 2 | [#10](https://github.com/ucsc/ucsc-communications-functionality/issues/10) | ~~`wp_reset_postdata()` unreachable~~ ✅ |
 | 3 | [#11](https://github.com/ucsc/ucsc-communications-functionality/issues/11) | ~~`composer run lint` fails~~ ✅ |
 | 4 | [#12](https://github.com/ucsc/ucsc-communications-functionality/issues/12) | ~~Shortcode output not escaped~~ ✅ |
-| 5 | [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13) | No direct-access guards |
+| 5 | [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13) | ~~No direct-access guards~~ ✅ |
 | 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | ~~Stale duplicate plugin header~~ ✅ |
 | 7 | [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15) | ~~`get_plugin_data()` on every admin page~~ ✅ |
-| 8 | [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16) | `Update URI` points at wrong repo |
+| 8 | [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16) | ~~`Update URI` points at wrong repo~~ ✅ |
 | 9 | [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17) | PHPCS formatting backlog |
 
 ---
@@ -99,13 +99,15 @@ linting.
 
 ---
 
-### 5. No direct-access guards
-**Status:** Open — [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13)
+### 5. ~~No direct-access guards~~
+**Status:** ✅ Fixed — [#13](https://github.com/ucsc/ucsc-communications-functionality/issues/13)
 **Files:** `plugin.php`, `lib/functions/*.php`
 
-None of the PHP files guard against direct HTTP access.
+None of the PHP files guarded against direct HTTP access.
 
-**Fix:** Add `defined( 'ABSPATH' ) || exit;` near the top of each file.
+**Fixed by:** adding `defined( 'ABSPATH' ) || exit;` immediately after the file
+docblock in all four PHP files. Placement is below the docblock so the plugin
+header in `plugin.php` is still the first thing WordPress parses.
 
 ---
 
@@ -142,27 +144,23 @@ Fixed together with item 1, which touches the same function.
 
 ---
 
-### 8. `Update URI` header points at a non-existent repo
-**Status:** Open — [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16)
-**File:** `plugin.php:13`
+### 8. ~~`Update URI` header points at a non-existent repo~~
+**Status:** ✅ Fixed — [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16)
+**File:** `plugin.php`
 
-```
-Update URI: https://github.com/ucsc/ucsc-communications-functionality-plugin/releases
-```
+The header pointed at `ucsc-communications-functionality-plugin`; the actual
+repository has no `-plugin` suffix.
 
-The actual repository is `ucsc/ucsc-communications-functionality` (no `-plugin`
-suffix).
-
-**Fix:** Correct the URL. Minor related nit: `Author URI` on line 10 has a
-trailing space.
+**Fixed by:** correcting the URL, aligning the header value with its neighbours,
+and stripping a trailing space from the `Author URI` line.
 
 ---
 
 ### 9. PHPCS formatting backlog
 **Status:** Open — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
 
-Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **89
-errors and 8 warnings**, **73 of them auto-fixable** by `phpcbf` — concentrated
+Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **87
+errors and 8 warnings**, **72 of them auto-fixable** by `phpcbf` — concentrated
 in `shortcodes.php` (missing docblocks, spacing, camelCase locals such as
 `$azItem` / `$azDef` / `$azDir` against WordPress naming conventions). This is
 why `composer run lint` exits non-zero today.
