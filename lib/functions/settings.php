@@ -23,19 +23,18 @@ if ( ! function_exists( 'ucsccomms_add_settings_page' ) ) {
 add_action( 'admin_menu', 'ucsccomms_add_settings_page' );
 
 
-/** 
- * HTML output of Settings page 
+/**
+ * HTML output of Settings page
  *
- * note: This page typically displays a form for displaying any settings options. 
+ * note: This page typically displays a form for displaying any settings options.
  * It is not needed at this point.
  * https://developer.wordpress.org/plugins/settings/custom-settings-page/
- *
  */
 
 if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 	function ucsccomms_render_plugin_settings_page() {
-		$plugin_file = UCSCCOMMS_PLUGIN_DIR . 'plugin.php';
-		$plugin_data = file_exists( $plugin_file ) ? get_plugin_data( $plugin_file ) : array();
+		$plugin_file    = UCSCCOMMS_PLUGIN_DIR . 'plugin.php';
+		$plugin_data    = file_exists( $plugin_file ) ? get_plugin_data( $plugin_file ) : array();
 		$plugin_name    = ! empty( $plugin_data['Name'] ) ? $plugin_data['Name'] : '';
 		$plugin_version = ! empty( $plugin_data['Version'] ) ? $plugin_data['Version'] : '';
 		$plugin_desc    = ! empty( $plugin_data['Description'] ) ? $plugin_data['Description'] : '';
@@ -52,7 +51,8 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 			<li><code>[style-archive]</code> — <?php echo esc_html( __( 'Displays a loop of all Editorial Style Guide posts on an archive page.', 'ucsccomms' ) ); ?></li>
 		</ul>
 		<h4><?php echo esc_html( __( 'ACF JSON', 'ucsccomms' ) ); ?></h4>
-		<p><?php
+		<p>
+		<?php
 			echo wp_kses(
 				sprintf(
 					/* translators: %s: acf-json folder name in code tags */
@@ -61,7 +61,8 @@ if ( ! function_exists( 'ucsccomms_render_plugin_settings_page' ) ) {
 				),
 				array( 'code' => array() )
 			);
-		?></p>
+		?>
+		</p>
 		</div>
 		<?php
 	}
