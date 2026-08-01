@@ -18,6 +18,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "build": "echo \"No build step: this plugin ships no compiled assets.\"",
     "release": "commit-and-tag-version",
     "dryrun": "commit-and-tag-version --dry-run",
     "zip": "wp-scripts plugin-zip",
