@@ -17,8 +17,9 @@
  * @package           ucsc-communications-functionality
  */
 
-// Set plugin directory and base name.
+// Set plugin directory, URL and base name.
 define( 'UCSCCOMMS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Path to plugin directory.
+define( 'UCSCCOMMS_PLUGIN_URL', plugin_dir_url( __FILE__ ) ); // URL of plugin directory, for enqueuing assets.
 define( 'UCSCCOMMS_PLUGIN_BASE', plugin_basename( __FILE__ ) ); // Plugin base name 'plugin.php' at root.
 
 // Include general functions.
