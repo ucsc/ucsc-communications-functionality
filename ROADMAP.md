@@ -4,7 +4,8 @@ Known issues and planned work for the UCSC Communications Custom Functionality p
 
 Findings below came from an audit against the WordPress Plugin Handbook baseline
 (structure, lifecycle, Settings API, security). Every item is tracked by a GitHub
-issue. Fixed items are struck through below and kept for context.
+issue. **All nine are now fixed** — they are struck through below and kept for
+context.
 
 | # | Issue | Item |
 |---|-------|------|
@@ -16,11 +17,11 @@ issue. Fixed items are struck through below and kept for context.
 | 6 | [#14](https://github.com/ucsc/ucsc-communications-functionality/issues/14) | ~~Stale duplicate plugin header~~ ✅ |
 | 7 | [#15](https://github.com/ucsc/ucsc-communications-functionality/issues/15) | ~~`get_plugin_data()` on every admin page~~ ✅ |
 | 8 | [#16](https://github.com/ucsc/ucsc-communications-functionality/issues/16) | ~~`Update URI` points at wrong repo~~ ✅ |
-| 9 | [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17) | PHPCS formatting backlog |
+| 9 | [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17) | ~~PHPCS formatting backlog~~ ✅ |
 
 ---
 
-## P1 — Bugs (silently broken today)
+## P1 — Bugs
 
 ### 1. ~~Admin settings CSS never loads~~
 **Status:** ✅ Fixed — [#9](https://github.com/ucsc/ucsc-communications-functionality/issues/9)
@@ -68,8 +69,8 @@ the `/docroot/` excludes, renaming the ruleset, restricting scanning to
 `composer lint-fix` was also simplified from `phpcbf --extensions=php .` to plain
 `phpcbf`, so both scripts now honour the same ruleset.
 
-**Note:** `composer run lint` still exits non-zero — that is the violation
-backlog in item 9, not a config fault.
+At the time of this fix `composer run lint` still exited non-zero due to the
+violation backlog in item 9; that has since been cleared and it now exits 0.
 
 ---
 
@@ -156,18 +157,24 @@ and stripping a trailing space from the `Author URI` line.
 
 ---
 
-### 9. PHPCS formatting backlog
-**Status:** Open — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
+### 9. ~~PHPCS formatting backlog~~
+**Status:** ✅ Fixed — [#17](https://github.com/ucsc/ucsc-communications-functionality/issues/17)
 
-Now that `.phpcs.xml.dist` is usable (item 3), `composer run lint` reports **87
-errors and 8 warnings**, **72 of them auto-fixable** by `phpcbf` — concentrated
-in `shortcodes.php` (missing docblocks, spacing, camelCase locals such as
-`$azItem` / `$azDef` / `$azDir` against WordPress naming conventions). This is
-why `composer run lint` exits non-zero today.
+Once `.phpcs.xml.dist` became usable (item 3), `composer run lint` reported 87
+errors and 8 warnings, concentrated in `shortcodes.php`.
 
-**Fix:** Run `composer run lint-fix`, then hand-resolve the remainder. Best done
-as its own commit so the mechanical reformatting does not obscure the
-behavioural fixes above.
+**Fixed in two commits** so the mechanical churn stayed separable from the
+deliberate edits:
+
+1. `phpcbf` auto-fixes — 72 violations of spacing, alignment and indentation.
+   Whitespace only.
+2. The remaining 23 by hand — docblocks attached to the functions they describe,
+   camelCase locals renamed to snake_case, `@param [type]` placeholders given
+   real types, and a stray `@package ucsc-giving-functionality` (copied from
+   another plugin) removed.
+
+**`composer run lint` now exits 0** with zero errors and zero warnings. A
+non-zero exit from here on is a genuine regression.
 
 ---
 

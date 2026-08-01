@@ -12,10 +12,8 @@ composer run lint-fix    # Auto-fix PHPCS violations
 
 `.phpcs.xml.dist` scans `plugin.php` and `lib/` (PHP only), so no paths are needed.
 
-⚠️ `composer run lint` **currently exits non-zero** — roughly 100 pre-existing violations,
-most of them auto-fixable formatting in `shortcodes.php`. That backlog is tracked in
-[ROADMAP.md](ROADMAP.md) item 9; it is not a config problem. Don't treat a non-zero exit
-as a regression until that is cleared.
+**PHPCS currently passes clean — `composer run lint` exits 0 with zero errors and zero
+warnings.** Keep it that way: any non-zero exit is a genuine regression.
 
 ### Release & Packaging
 ```bash
@@ -65,12 +63,8 @@ Simple informational page under **Settings** showing plugin version (linked to G
 
 ## Known issues
 
-**See [ROADMAP.md](ROADMAP.md) for the full list.** These are documented but *not yet
-fixed* — do not assume the code in these areas is correct:
-
-- `lib/functions/shortcodes.php` and `lib/functions/settings.php` carry the bulk of the
-  outstanding PHPCS violations ([ROADMAP.md](ROADMAP.md) item 9), so `composer run lint`
-  exits non-zero. Nothing else is known-broken.
+None outstanding. All nine items from the original audit are fixed — see
+[ROADMAP.md](ROADMAP.md), which keeps each one with its cause and fix for context.
 
 ## Known quirks
 
