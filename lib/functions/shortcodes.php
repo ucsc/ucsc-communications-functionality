@@ -14,64 +14,63 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Register the A-Z Editorial Style Guide shortcode.
+ * Render the style definitions for the current post.
  *
- * @return string
+ * Handles the [style-definition] shortcode, which outputs the
+ * `style_definitions` repeater for whichever post is in context.
+ *
+ * @return string HTML markup for the current post's style definitions.
  */
-// This shortcode outputs the A-Z Editorial Style Guide definitions.
-
-add_shortcode( 'style-definition','ucsccomms_a_z_style_guide_single_loop' );
-
-function ucsccomms_a_z_style_guide_single_loop(){
-
+function ucsccomms_a_z_style_guide_single_loop() {
 	$finaldefs = '';
 
-	if( have_rows('style_definitions') ):while( have_rows('style_definitions') ): the_row();
-		$azItem = get_sub_field('editorial_style_item');
-		$azDef = get_sub_field('editorial_style_definition');
-		// esc_html() for the plain-text item; wp_kses_post() for the WYSIWYG definition.
-		$finaldefs .= '<p><b>' . esc_html( $azItem ) . ':</b></p>' . wp_kses_post( $azDef ) . '<hr>';
+	if ( have_rows( 'style_definitions' ) ) :
+		while ( have_rows( 'style_definitions' ) ) :
+			the_row();
+			$az_item = get_sub_field( 'editorial_style_item' );
+			$az_def  = get_sub_field( 'editorial_style_definition' );
+			// esc_html() for the plain-text item; wp_kses_post() for the WYSIWYG definition.
+			$finaldefs .= '<p><b>' . esc_html( $az_item ) . ':</b></p>' . wp_kses_post( $az_def ) . '<hr>';
 		endwhile;
 	endif;
 
-return $finaldefs;
+	return $finaldefs;
 }
+add_shortcode( 'style-definition', 'ucsccomms_a_z_style_guide_single_loop' );
 
 /**
- * Register the A-Z Editorial Style Guide archive shortcode.
+ * Render every Editorial Style Guide entry as an archive.
  *
- * @return string
+ * Handles the [style-archive] shortcode. Retrieves all `a_z_style_guide` posts
+ * ordered by title ascending, and renders each title followed by its style
+ * definitions.
+ *
+ * @return string HTML markup for the full style guide archive.
  */
-// This shortcode outputs the A-Z Editorial Style Guide archive loop.
-// It retrieves all posts of the 'a_z_style_guide' post type, ordered by title in ascending order, and displays each post's title along with its style definitions.
-add_shortcode( 'style-archive','ucsccomms_a_z_styles_archive_loop' );
-
 function ucsccomms_a_z_styles_archive_loop() {
 	$finalloop = '';
 
-	// Call Post
-	$args = array (
-	'post_type' => 'a_z_style_guide',
-	'orderby' => 'title',
-	'order' => 'ASC',
-	'posts_per_page' => -1,
+	$args = array(
+		'post_type'      => 'a_z_style_guide',
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+		'posts_per_page' => -1,
 	);
 
-	$azDir = new \WP_Query( $args );
+	$az_dir = new \WP_Query( $args );
 
-	if ($azDir->have_posts()) :
-		while ($azDir->have_posts()) :
-			$azDir->the_post();
-			$azTitle = get_the_title();
-			$finalloop .= '<h2>' . esc_html( $azTitle ) . '</h2>';
-			if( have_rows('style_definitions') ):
-				while( have_rows('style_definitions') ):
+	if ( $az_dir->have_posts() ) :
+		while ( $az_dir->have_posts() ) :
+			$az_dir->the_post();
+			$az_title   = get_the_title();
+			$finalloop .= '<h2>' . esc_html( $az_title ) . '</h2>';
+			if ( have_rows( 'style_definitions' ) ) :
+				while ( have_rows( 'style_definitions' ) ) :
 					the_row();
-					// vars
-					$azItem = get_sub_field('editorial_style_item');
-					$azDef = get_sub_field('editorial_style_definition');
+					$az_item = get_sub_field( 'editorial_style_item' );
+					$az_def  = get_sub_field( 'editorial_style_definition' );
 					// esc_html() for the plain-text item; wp_kses_post() for the WYSIWYG definition.
-					$finalloop .= '<p><b>' . esc_html( $azItem ) . ':</b></p>' . wp_kses_post( $azDef ) . '<hr>';
+					$finalloop .= '<p><b>' . esc_html( $az_item ) . ':</b></p>' . wp_kses_post( $az_def ) . '<hr>';
 				endwhile;
 			endif;
 		endwhile;
@@ -81,3 +80,4 @@ function ucsccomms_a_z_styles_archive_loop() {
 
 	return $finalloop;
 }
+add_shortcode( 'style-archive', 'ucsccomms_a_z_styles_archive_loop' );
