@@ -7,6 +7,15 @@
 	<file>plugin.php</file>
 	<file>lib/</file>
 
+	<!--
+	tests/ is deliberately not scanned. The WordPress and ACF doubles in
+	tests/wp-stubs.php must declare unprefixed global names (have_rows,
+	esc_html, class WP_Query) to stand in for the real functions, which is
+	exactly what WordPress.NamingConventions.PrefixAllGlobals forbids. Linting
+	them would need roughly six sniff exclusions to cover ~110 lines of test
+	scaffolding, so the code under test is scanned and the doubles are not.
+	-->
+
 	<!-- Only check PHP; the plugin ships no linted JS and CSS is checked elsewhere. -->
 	<arg name="extensions" value="php"/>
 
