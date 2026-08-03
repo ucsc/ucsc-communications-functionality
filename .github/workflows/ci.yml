@@ -3,6 +3,11 @@
 # Runs on every pull request and on pushes to main. The PHPCS job enforces the
 # "composer run lint exits 0" invariant documented in CLAUDE.md, which until now
 # was enforced only by discipline.
+#
+# Action versions are on the Node 24 runtime. ramsey/composer-install@v4 in
+# particular requires Actions Runner 2.327.1 or newer -- fine on the
+# GitHub-hosted ubuntu-latest used here, but it would need checking first if
+# these jobs ever move to a self-hosted runner.
 
 name: CI
 
@@ -24,7 +29,7 @@ jobs:
         name: PHPCS
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             # PHPCS output does not vary by runtime, so one PHP version is enough.
             - uses: shivammathur/setup-php@v2
@@ -32,7 +37,7 @@ jobs:
                   php-version: "8.3"
                   coverage: none
 
-            - uses: ramsey/composer-install@v3
+            - uses: ramsey/composer-install@v4
 
             - run: composer run lint
 
@@ -49,13 +54,13 @@ jobs:
                 # to PHPCompatibility rather than to this job.
                 php: ["8.3", "8.4"]
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
                   coverage: none
 
-            - uses: ramsey/composer-install@v3
+            - uses: ramsey/composer-install@v4
 
             - run: composer run test
