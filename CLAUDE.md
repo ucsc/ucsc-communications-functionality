@@ -8,12 +8,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 composer run lint        # PHP CodeSniffer (WordPress-Extra + WordPress-Docs standards)
 composer run lint-fix    # Auto-fix PHPCS violations
+composer run test        # PHPUnit — runs against WP/ACF doubles, no WordPress install
+composer run check       # lint + test
 ```
 
 `.phpcs.xml.dist` scans `plugin.php` and `lib/` (PHP only), so no paths are needed.
+`tests/` is deliberately **not** scanned — see the comment in the ruleset.
 
 **PHPCS currently passes clean — `composer run lint` exits 0 with zero errors and zero
 warnings.** Keep it that way: any non-zero exit is a genuine regression.
+
+`.github/workflows/ci.yml` runs both on every PR, so this is now machine-enforced
+rather than a matter of discipline.
+
+**Local requirement:** PHPUnit needs `ext-mbstring`, which the system `php8.5` here
+does not have. Either `sudo apt install php8.5-mbstring`, or run the suite in a
+container:
+`docker run --rm -v "$PWD":/app -w /app --user "$(id -u):$(id -g)" php:8.3-cli ./vendor/bin/phpunit`
 
 ### Release & Packaging
 ```bash
@@ -61,6 +72,27 @@ Simple informational page under **Settings** showing plugin version (linked to G
 ### Namespace / autoloading
 `composer.json` defines PSR-4 autoloading: `UCSC\UcscCommunicationsFunctionality\` → `src/`. No `src/` directory exists yet; this is placeholder infrastructure. Current code uses procedural `require_once` includes.
 
+### Tests (`tests/`)
+PHPUnit against hand-written WordPress/ACF doubles — no WordPress install, no database,
+no ACF Pro. Things to know before touching them:
+
+- `tests/bootstrap.php` **must** `define( 'ABSPATH' )` before including anything. All
+  four PHP files open with `defined( 'ABSPATH' ) || exit;`, so an include without it
+  silently exits and takes the test runner down with it.
+- The bootstrap includes `plugin.php` exactly once (no `function_exists()` guards there),
+  which fires every `add_action`/`add_filter`/`add_shortcode` into a recording registry.
+  `ucsccomms_test_reset( true )` preserves that registry between tests while clearing
+  everything else.
+- `have_rows()`/`the_row()` in `tests/wp-stubs.php` are a **stateful iterator pair** over
+  a cursor in `$GLOBALS['ucsccomms_test']`. `have_rows()` peeks and never advances; only
+  `the_row()` moves the cursor. A double that returns a constant `true` infinite-loops —
+  there is a 1000-call tripwire that throws rather than hanging CI.
+  `WP_Query::the_post()` rewinds that cursor per post, mirroring real ACF.
+- **`esc_html()` is faithful; `wp_kses_post()` is a pass-through spy.** The escaping tests
+  assert the *escape-before-concatenate contract*, not real KSES filtering. A green suite
+  is not proof of XSS safety. This asymmetry is deliberate — it makes the two regressions
+  fail different assertions.
+
 ## Known issues
 
 None outstanding. All nine items from the original audit are fixed — see
@@ -68,8 +100,16 @@ None outstanding. All nine items from the original audit are fixed — see
 
 ## Known quirks
 
-- No unit tests, no PHPStan config, no JS build pipeline (no blocks or interactive JS).
+- No PHPStan config, no JS build pipeline (no blocks or interactive JS).
 - `composer.json` maps PSR-4 `UCSC\UcscCommunicationsFunctionality\` → `src/`, but no
   `src/` directory exists; all current code is procedural `require_once` includes.
-- `lib/functions/shortcodes.php` carries a stale second plugin header (`Version: 0.1.0`)
-  that does not track the real plugin version.
+  Tracked as issue #24.
+- `plugin.php` header declares `Requires PHP: 7.0`, but `lib/functions/general.php`
+  uses a `: void` return type (PHP 7.1+), so the plugin actually fatals on 7.0. The
+  declared floor is wrong. Tracked separately.
+- `settings.php` and `general.php` each hard-code the literal
+  `ucsc-communications-functionality-settings` independently — one as the menu slug,
+  one in a `strpos()` screen check — with no shared constant. They must stay in sync
+  or the admin stylesheet silently stops loading. Pinned by `RegistrationTest`.
+- `plugin.php` and `lib/functions/shortcodes.php` have **no `function_exists()` guards**
+  (unlike `general.php` and `settings.php`), so double-inclusion is fatal.

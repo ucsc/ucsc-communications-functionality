@@ -98,6 +98,13 @@ the same allowlist as post content rather than being flattened.
 accumulated into a returned string — this class of bug needs review, not just
 linting.
 
+**Now covered by tests.** `tests/ShortcodeEscapingTest.php` pins both paths:
+`test_single_loop_escapes_item_and_kses_filters_definition` and
+`test_archive_loop_escapes_title_item_and_definition`. Both were mutation-checked
+— deleting `esc_html()` or `wp_kses_post()` from either concatenation fails the
+suite. See the new "Unit tests" section below for what those tests do and do not
+prove.
+
 ---
 
 ### 5. ~~No direct-access guards~~
@@ -178,10 +185,61 @@ non-zero exit from here on is a genuine regression.
 
 ---
 
+## Unit tests
+
+A PHPUnit suite now covers the shortcode escaping contract and the plugin's
+structural contracts. `composer run test` runs it; `composer run check` runs lint
+and tests together. It needs no WordPress install, no database and no ACF Pro,
+and finishes in about 10ms.
+
+**How it works.** `tests/wp-stubs.php` hand-writes doubles for the ~25 WordPress
+and ACF functions the plugin actually calls. `tests/bootstrap.php` defines
+`ABSPATH`, loads those doubles, then includes `plugin.php` exactly once — which
+fires every `add_action`/`add_filter`/`add_shortcode` into a recording registry
+that `RegistrationTest` asserts against.
+
+**What the escaping tests prove, and what they don't.** `esc_html()` is a
+faithful double, but `wp_kses_post()` is a deliberate pass-through spy — the real
+KSES allowlist is not reproducible outside WordPress. So the suite asserts the
+*escape-before-concatenate contract* — that every dynamic value goes through an
+escaper before it lands in the returned string — and **not** that KSES filters
+correctly. That contract is exactly the thing that broke in item 4, so it is the
+right assertion, but do not read a green suite as proof of XSS safety.
+
+**Why not integration tests.** The `a_z_style_guide` CPT and the
+`style_definitions` repeater are both registered by ACF from `acf-json/`, and ACF
+Pro is a paid, non-public dependency. Real integration tests would need a license
+key in CI and a download from `connect.advancedcustomfields.com`. The escape
+hatch — calling `register_post_type()` manually and hand-writing repeater meta —
+means faking ACF anyway, with a WordPress install and a MySQL service around it.
+Not a defensible trade for 272 lines.
+
+**Why not Brain Monkey**, the usual choice here: `have_rows()`/`the_row()` are a
+stateful iterator pair, and the cursor double has to be hand-written either way
+(a `justReturn(true)` stub infinite-loops), so Brain Monkey adds nothing where the
+difficulty actually is. It would also handle this plugin's include-time hook
+registration badly, since it resets its registry per test. It remains the natural
+upgrade path if a `src/` with classes ever appears — the test cases barely change.
+
+**Every test was mutation-checked.** Deleting `esc_html()` or `wp_kses_post()`
+from either concatenation, making `wp_reset_postdata()` unreachable again,
+regressing the stylesheet path to `lib/functions/`, typoing the CPT slug, or
+dropping `the_row()` from a loop each fail the suite. The last one trips a
+deliberate 1000-iteration guard in `have_rows()` that throws instead of hanging CI.
+
+---
+
 ## Deferred / not planned
 
-- **No unit tests.** No PHPUnit or WP test scaffolding exists.
-- **No PHPStan config.** See the `wp-phpstan` workflow if this is picked up.
+- **No PHPStan config.** Worth knowing what it would and would not buy here:
+  PHPStan at level 4 **would** have caught item 2 (`wp_reset_postdata()` sitting
+  unreachable after a `return`), but it has **no taint analysis**, so it would
+  **not** have caught item 4 — tracking an unescaped value into a returned string
+  needs Psalm's `--taint-analysis`, which in turn needs a WP stub set annotated
+  with taint sinks and escapers. That is more setup than this entire test suite,
+  for one plugin. Item 4 is covered by tests instead. Still deferred, but for
+  that reason rather than "not got to it yet". See the `wp-phpstan` workflow if
+  it is picked up.
 - **Empty `src/` PSR-4 mapping.** `composer.json` maps
   `UCSC\UcscCommunicationsFunctionality\` → `src/`, but no `src/` directory
   exists and all current code is procedural. Either build into it or drop the

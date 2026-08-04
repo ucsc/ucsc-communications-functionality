@@ -50,3 +50,10 @@ node_modules/
 /vendor/
 # Plugin zip produced by `npm run zip` / wp-scripts plugin-zip.
 *.zip
+
+# PHPUnit. The cache is a directory on PHPUnit 10+ and a file on 9.x; both are
+# listed so switching lines never leaks one into a commit.
+/.phpunit.cache/
+/.phpunit.result.cache
+# Local override of phpunit.xml.dist.
+/phpunit.xml

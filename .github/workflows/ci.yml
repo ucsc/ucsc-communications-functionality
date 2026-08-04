@@ -1,0 +1,66 @@
+# Continuous integration.
+#
+# Runs on every pull request and on pushes to main. The PHPCS job enforces the
+# "composer run lint exits 0" invariant documented in CLAUDE.md, which until now
+# was enforced only by discipline.
+#
+# Action versions are on the Node 24 runtime. ramsey/composer-install@v4 in
+# particular requires Actions Runner 2.327.1 or newer -- fine on the
+# GitHub-hosted ubuntu-latest used here, but it would need checking first if
+# these jobs ever move to a self-hosted runner.
+
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ci-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    lint:
+        name: PHPCS
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+
+            # PHPCS output does not vary by runtime, so one PHP version is enough.
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  coverage: none
+
+            - uses: ramsey/composer-install@v4
+
+            - run: composer run lint
+
+    test:
+        name: PHPUnit (PHP ${{ matrix.php }})
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                # PHPUnit 12's floor is 8.3. This matrix is a toolchain smoke
+                # check, not a compatibility matrix -- every test is pure
+                # string/array logic with no runtime-sensitive behaviour. The
+                # plugin's own runtime floor is a separate concern, and belongs
+                # to PHPCompatibility rather than to this job.
+                php: ["8.3", "8.4"]
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
+
+            - uses: ramsey/composer-install@v4
+
+            - run: composer run test
