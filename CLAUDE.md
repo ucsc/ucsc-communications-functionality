@@ -37,7 +37,7 @@ container:
 ### Release & Packaging
 ```bash
 npm run dryrun     # Preview version bump without committing
-npm run release    # Bump version via standard-version (updates plugin.php header + CHANGELOG.md)
+npm run release    # Bump version via commit-and-tag-version (updates plugin.php header + CHANGELOG.md)
 npm run zip        # Package plugin as .zip for distribution
 ```
 
