@@ -231,6 +231,44 @@ deliberate 1000-iteration guard in `have_rows()` that throws instead of hanging 
 
 ## Resolved after the audit
 
+### ~~`Requires PHP` header understated the real floor~~
+**Status:** ✅ Fixed — [#25](https://github.com/ucsc/ucsc-communications-functionality/issues/25)
+**Files:** `plugin.php`, `.phpcs.xml.dist`, `composer.json`
+
+`plugin.php` declared `Requires PHP: 7.0`, but `lib/functions/general.php` declares
+`ucsccomms_enqueue_admin_styles(): void` — a return type added in PHP 7.1. On 7.0 that
+is a parse error, so the plugin did not merely misbehave on its advertised floor, it
+fatalled on activation. `: void` was the *only* construct above 7.0 in the codebase, so
+the true floor was 7.1.
+
+Nothing enforced the claim either: no `require` php constraint in `composer.json`, no
+`config.platform.php`, `"platform": {}` in the lock, and the `PHPCompatibilityWP` block
+in `.phpcs.xml.dist` commented out since the ruleset was first written.
+
+**Fixed by:** setting the header to **7.4**, adding
+`phpcompatibility/phpcompatibility-wp` to `require-dev`, and switching on the ruleset
+block with `testVersion` `7.4-`. The open-ended form also catches constructs *removed*
+in later PHP, not just ones too new for the floor.
+
+**7.4 over 8.1** was a deliberate call: it is the conservative claim, safely true of the
+current code, and it keeps the widest install compatibility. Both are past EOL as of
+August 2026 (7.4 since Nov 2022, 8.1 since Dec 2025), so neither is an endorsement — the
+header is a statement about where the plugin *parses and runs*, not about what anyone
+should be hosting on.
+
+**`composer run lint` still exits 0** — the new standard produced zero findings against
+the 204 lines of plugin code. That the sniff genuinely fires was mutation-checked:
+setting `testVersion` to `7.0-` reports
+`PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound` on
+`general.php:25`, which is precisely the bug this issue described.
+
+The floor is a runtime constraint and is independent of the test toolchain: PHPUnit ^12.5
+needs PHP 8.3+ and CI runs it on 8.3/8.4, but PHPCompatibility proves the 7.4 floor
+statically, with no 7.4 runtime anywhere. Conflating the two is what pushes projects back
+onto PHPUnit 9.6 for no benefit.
+
+---
+
 ### ~~Empty `src/` PSR-4 mapping~~
 **Status:** ✅ Fixed — [#24](https://github.com/ucsc/ucsc-communications-functionality/issues/24)
 **File:** `composer.json`

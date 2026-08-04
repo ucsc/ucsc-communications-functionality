@@ -15,6 +15,14 @@ composer run check       # lint + test
 `.phpcs.xml.dist` scans `plugin.php` and `lib/` (PHP only), so no paths are needed.
 `tests/` is deliberately **not** scanned — see the comment in the ruleset.
 
+The ruleset also runs **PHPCompatibilityWP** at `testVersion` `7.4-`, which is what
+actually proves the `Requires PHP: 7.4` header in `plugin.php`. Nothing else enforces
+that floor: `composer.json` declares no `require` php constraint and no
+`config.platform.php`. **The two values must be changed together** — raising or lowering
+one without the other silently re-opens the contradiction that issue #25 fixed. Note the
+floor is a *runtime* claim about where the plugin may be installed; it is unrelated to
+the PHP the test suite needs (PHPUnit 12 wants 8.3+).
+
 **PHPCS currently passes clean — `composer run lint` exits 0 with zero errors and zero
 warnings.** Keep it that way: any non-zero exit is a genuine regression.
 
@@ -110,9 +118,8 @@ None outstanding. All nine items from the original audit are fixed — see
 ## Known quirks
 
 - No PHPStan config, no JS build pipeline (no blocks or interactive JS).
-- `plugin.php` header declares `Requires PHP: 7.0`, but `lib/functions/general.php`
-  uses a `: void` return type (PHP 7.1+), so the plugin actually fatals on 7.0. The
-  declared floor is wrong. Tracked separately.
+- The `Requires PHP` header and the PHPCS `testVersion` are a second pair that must stay
+  in sync by hand — see the note under **Commands → PHP**.
 - `settings.php` and `general.php` each hard-code the literal
   `ucsc-communications-functionality-settings` independently — one as the menu slug,
   one in a `strpos()` screen check — with no shared constant. They must stay in sync

@@ -5,7 +5,7 @@
  * Description:       Custom functionality for UCSC Communications and Marketing Website.
  * Version:           1.0.5
  * Requires at least: 6.1
- * Requires PHP:      7.0
+ * Requires PHP:      7.4
  * Author:            UC Santa Cruz
  * Author URI:        https://github.com/ucsc
  * License:           GPL-3.0-or-later
