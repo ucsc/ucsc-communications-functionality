@@ -23,11 +23,6 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "autoload": {
-        "psr-4": {
-            "UCSC\\UcscCommunicationsFunctionality\\": "src/"
-        }
-    },
     "autoload-dev": {
         "psr-4": {
             "UCSC\\UcscCommunicationsFunctionality\\Tests\\": "tests/"

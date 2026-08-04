@@ -70,7 +70,16 @@ inspects `echo`/`print`, so unescaped values in a returned string lint clean.
 Simple informational page under **Settings** showing plugin version (linked to GitHub releases) and feature list. Requires `manage_options` capability.
 
 ### Namespace / autoloading
-`composer.json` defines PSR-4 autoloading: `UCSC\UcscCommunicationsFunctionality\` → `src/`. No `src/` directory exists yet; this is placeholder infrastructure. Current code uses procedural `require_once` includes.
+There is none at runtime. All code is procedural, loaded by `require_once` from
+`plugin.php`, and `vendor/autoload.php` is never required — `vendor/` is gitignored and
+`npm run zip` does not ship it, so nothing autoloaded could survive packaging anyway.
+
+`composer.json` keeps only an `autoload-dev` PSR-4 mapping,
+`UCSC\UcscCommunicationsFunctionality\Tests\` → `tests/`, which the test suite does use.
+The matching production mapping to `src/` was removed in #24 as dead configuration. If
+classes are ever introduced, re-add the `autoload` block in the same commit as the first
+class, and remember that shipping them also means requiring the autoloader in `plugin.php`
+and including `vendor/` (or a production-only autoloader) in the release zip.
 
 ### Tests (`tests/`)
 PHPUnit against hand-written WordPress/ACF doubles — no WordPress install, no database,
@@ -101,9 +110,6 @@ None outstanding. All nine items from the original audit are fixed — see
 ## Known quirks
 
 - No PHPStan config, no JS build pipeline (no blocks or interactive JS).
-- `composer.json` maps PSR-4 `UCSC\UcscCommunicationsFunctionality\` → `src/`, but no
-  `src/` directory exists; all current code is procedural `require_once` includes.
-  Tracked as issue #24.
 - `plugin.php` header declares `Requires PHP: 7.0`, but `lib/functions/general.php`
   uses a `: void` return type (PHP 7.1+), so the plugin actually fatals on 7.0. The
   declared floor is wrong. Tracked separately.

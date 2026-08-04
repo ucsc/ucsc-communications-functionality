@@ -229,6 +229,30 @@ deliberate 1000-iteration guard in `have_rows()` that throws instead of hanging 
 
 ---
 
+## Resolved after the audit
+
+### ~~Empty `src/` PSR-4 mapping~~
+**Status:** ✅ Fixed — [#24](https://github.com/ucsc/ucsc-communications-functionality/issues/24)
+**File:** `composer.json`
+
+`composer.json` mapped `UCSC\UcscCommunicationsFunctionality\` → `src/`, but three
+things made that mapping inert: no `src/` directory existed, no namespaced classes
+existed, and `plugin.php` never required `vendor/autoload.php`. `vendor/` is gitignored
+and `npm run zip` does not ship it, so even a populated `src/` would not have loaded in
+a released build. The mapping loaded nothing and broke nothing — it advertised an
+architecture the plugin does not have.
+
+**Fixed by:** dropping the `autoload` block. The `autoload-dev` mapping
+(`…\Tests\` → `tests/`) stays, because the test suite genuinely uses it.
+
+Building into `src/` instead was the other option and was rejected as out of scope: it
+is a restructuring of all current procedural code, plus requiring the autoloader at
+runtime and shipping `vendor/` (or a production autoloader) in the zip. If classes are
+introduced later, the `autoload` block should come back in the same commit as the first
+class, together with that packaging work.
+
+---
+
 ## Deferred / not planned
 
 - **No PHPStan config.** Worth knowing what it would and would not buy here:
@@ -240,9 +264,5 @@ deliberate 1000-iteration guard in `have_rows()` that throws instead of hanging 
   for one plugin. Item 4 is covered by tests instead. Still deferred, but for
   that reason rather than "not got to it yet". See the `wp-phpstan` workflow if
   it is picked up.
-- **Empty `src/` PSR-4 mapping.** `composer.json` maps
-  `UCSC\UcscCommunicationsFunctionality\` → `src/`, but no `src/` directory
-  exists and all current code is procedural. Either build into it or drop the
-  mapping.
 - **No `uninstall.php`.** Currently correct: the plugin registers no options and
   creates no tables, so there is nothing to clean up. Revisit if that changes.
