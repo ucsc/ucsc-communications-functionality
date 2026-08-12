@@ -3,7 +3,7 @@
  * Plugin Name:       UCSC Communications Custom Functionality
  * Plugin URI:        https://github.com/ucsc/ucsc-communications-functionality
  * Description:       Custom functionality for UCSC Communications and Marketing Website.
- * Version:           1.0.5
+ * Version:           1.0.6
  * Requires at least: 6.1
  * Requires PHP:      7.4
  * Author:            UC Santa Cruz

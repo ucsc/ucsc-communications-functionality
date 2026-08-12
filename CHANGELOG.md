@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.6](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.5...v1.0.6) (2026-08-12)
+
+
+### Bug Fixes
+
+* **meta:** correct the Requires PHP floor to 7.4 and enforce it with PHPCompatibility ([#28](https://github.com/ucsc/ucsc-communications-functionality/issues/28)) ([dc981ac](https://github.com/ucsc/ucsc-communications-functionality/commit/dc981ac58cffdd3393a6da6121c9e772cbd1a0a9)), closes [#25](https://github.com/ucsc/ucsc-communications-functionality/issues/25)
+
 ## [1.0.5](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.4...v1.0.5) (2026-08-01)
 
 
