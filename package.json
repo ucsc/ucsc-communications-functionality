@@ -25,6 +25,7 @@
     "packages-update": "wp-scripts packages-update"
   },
   "devDependencies": {
+    "@ucsantacruz/wordpress-version-updater": "^2.0.0",
     "@wordpress/scripts": "^30.23.0",
     "commit-and-tag-version": "^12.0.0"
   },
@@ -37,7 +38,14 @@
     "LICENSE"
   ],
   "commit-and-tag-version": {
+    "scripts": {
+      "prerelease": "wordpress-version-updater check plugin.php"
+    },
     "bumpFiles": [
+      {
+        "filename": "plugin.php",
+        "updater": "node_modules/@ucsantacruz/wordpress-version-updater/index.js"
+      },
       {
         "filename": "package-lock.json",
         "type": "json"
@@ -45,10 +53,6 @@
       {
         "filename": "package.json",
         "type": "json"
-      },
-      {
-        "filename": "plugin.php",
-        "updater": "wp-plugin-version-updater.js"
       }
     ]
   }

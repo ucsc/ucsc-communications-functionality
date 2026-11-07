@@ -41,7 +41,10 @@ npm run release    # Bump version via commit-and-tag-version (updates plugin.php
 npm run zip        # Package plugin as .zip for distribution
 ```
 
-`npm run release` uses `wp-plugin-version-updater.js` to keep the version string in the `plugin.php` header in sync alongside the standard `package.json` bump.
+`npm run release` uses the `@ucsantacruz/wordpress-version-updater` dev dependency as the
+`plugin.php` bump-file updater, which keeps the `Version:` header in sync with the
+`package.json` bump. A `prerelease` hook runs `wordpress-version-updater check plugin.php`
+first, so the release stops before any bump if the header cannot be parsed.
 
 ## Architecture
 
