@@ -14,8 +14,8 @@ require_once __DIR__ . '/wp-stubs.php';
 
 ucsccomms_test_reset();
 
-// Include the real plugin bootstrap exactly once. plugin.php and shortcodes.php
-// have no function_exists() guards, so a second include is fatal. This defines
+// Include the real plugin bootstrap. A second include is a no-op, because plugin.php
+// returns early once UCSCCOMMS_PLUGIN_DIR is defined (see DoubleInclusionTest). This defines
 // the UCSCCOMMS_* constants, pulls in the three lib files, and fires every
 // add_action/add_filter/add_shortcode into the recording registry.
 require_once dirname( __DIR__ ) . '/plugin.php';

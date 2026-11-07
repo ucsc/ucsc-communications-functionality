@@ -291,6 +291,30 @@ class, together with that packaging work.
 
 ---
 
+### ~~A second copy of the plugin was fatal~~
+**Status:** ✅ Fixed — [#33](https://github.com/ucsc/ucsc-communications-functionality/issues/33)
+**Files:** `plugin.php`, `lib/functions/shortcodes.php`
+
+`plugin.php` and `lib/functions/shortcodes.php` had no `function_exists()` guards,
+unlike `general.php` and `settings.php`. Inside one copy of the plugin this was safe,
+because WordPress loads `plugin.php` once and `plugin.php` loads each lib file with
+`require_once` / `include_once`. But a second copy in another directory (for example
+after a second zip upload) has different paths, so `*_once` does not stop it. That copy
+warned on the three `define()` calls and then fatalled on the first unguarded function.
+
+`function_exists()` guards alone do not fix this: the constants still warn, and the site
+runs a mix of functions from two copies that can be different versions.
+
+**Fixed by:** an early `return` at the top of `plugin.php` when `UCSCCOMMS_PLUGIN_DIR` is
+already defined, so the first copy that loads wins and the second copy does nothing.
+The four unguarded functions also got `function_exists()` guards, to match the rest of
+the codebase. `tests/DoubleInclusionTest.php` includes both files a second time.
+The same change dropped a stray leading slash from the `settings.php` and `shortcodes.php`
+include paths (`UCSCCOMMS_PLUGIN_DIR . '/lib/...'`), which made a double slash because
+`plugin_dir_path()` already ends in one.
+
+---
+
 ## Deferred / not planned
 
 - **No PHPStan config.** Worth knowing what it would and would not buy here:
