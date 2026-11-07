@@ -105,7 +105,9 @@ them there, keeping them under version control.
 
 `npm run release` uses [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version)
 to bump `package.json`, `package-lock.json`, and the `Version:` header in `plugin.php`
-(through `wp-plugin-version-updater.js`), and to update `CHANGELOG.md` from the commit
+(through the
+[`@ucsantacruz/wordpress-version-updater`](https://www.npmjs.com/package/@ucsantacruz/wordpress-version-updater)
+package), and to update `CHANGELOG.md` from the commit
 history. Push the resulting `v*.*.*` tag and
 [.github/workflows/release.yml](.github/workflows/release.yml) builds the zip and
 publishes the GitHub release via the shared `ucsc/actions` workflow.
