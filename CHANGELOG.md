@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.8](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.7...v1.0.8) (2026-11-07)
+
+
+### Bug Fixes
+
+* drop the stray leading slash from two include paths ([2b7b955](https://github.com/ucsc/ucsc-communications-functionality/commit/2b7b955724b26c4ec16ef7ea402d424532874732)), closes [#33](https://github.com/ucsc/ucsc-communications-functionality/issues/33)
+* make a second copy of the plugin load safely ([3271b6e](https://github.com/ucsc/ucsc-communications-functionality/commit/3271b6ed2c0b1a573f95d1ae15f0ff120738fd75)), closes [#33](https://github.com/ucsc/ucsc-communications-functionality/issues/33)
+
 ## [1.0.7](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.6...v1.0.7) (2026-11-07)
 
 ## [1.0.6](https://github.com/ucsc/ucsc-communications-functionality/compare/v1.0.5...v1.0.6) (2026-08-12)
