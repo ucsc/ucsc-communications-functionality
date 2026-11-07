@@ -99,8 +99,7 @@ no ACF Pro. Things to know before touching them:
 - `tests/bootstrap.php` **must** `define( 'ABSPATH' )` before including anything. All
   four PHP files open with `defined( 'ABSPATH' ) || exit;`, so an include without it
   silently exits and takes the test runner down with it.
-- The bootstrap includes `plugin.php` exactly once (no `function_exists()` guards there),
-  which fires every `add_action`/`add_filter`/`add_shortcode` into a recording registry.
+- The bootstrap includes `plugin.php` once, which fires every `add_action`/`add_filter`/`add_shortcode` into a recording registry.
   `ucsccomms_test_reset( true )` preserves that registry between tests while clearing
   everything else.
 - `have_rows()`/`the_row()` in `tests/wp-stubs.php` are a **stateful iterator pair** over
@@ -127,5 +126,7 @@ None outstanding. All nine items from the original audit are fixed — see
   `ucsc-communications-functionality-settings` independently — one as the menu slug,
   one in a `strpos()` screen check — with no shared constant. They must stay in sync
   or the admin stylesheet silently stops loading. Pinned by `RegistrationTest`.
-- `plugin.php` and `lib/functions/shortcodes.php` have **no `function_exists()` guards**
-  (unlike `general.php` and `settings.php`), so double-inclusion is fatal.
+- `plugin.php` returns early if `UCSCCOMMS_PLUGIN_DIR` is already defined, so a second
+  copy of the plugin in another directory loads nothing and the first copy wins. Every
+  function in `plugin.php` and `lib/functions/` also has a `function_exists()` guard.
+  Keep both when you add code. Pinned by `DoubleInclusionTest`.
