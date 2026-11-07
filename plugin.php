@@ -35,12 +35,12 @@ if ( file_exists( UCSCCOMMS_PLUGIN_DIR . 'lib/functions/general.php' ) ) {
 	require_once UCSCCOMMS_PLUGIN_DIR . 'lib/functions/general.php';
 }
 // Include settings.
-if ( file_exists( UCSCCOMMS_PLUGIN_DIR . '/lib/functions/settings.php' ) ) {
-	include_once UCSCCOMMS_PLUGIN_DIR . '/lib/functions/settings.php';
+if ( file_exists( UCSCCOMMS_PLUGIN_DIR . 'lib/functions/settings.php' ) ) {
+	include_once UCSCCOMMS_PLUGIN_DIR . 'lib/functions/settings.php';
 }
 // Include shortcodes.
-if ( file_exists( UCSCCOMMS_PLUGIN_DIR . '/lib/functions/shortcodes.php' ) ) {
-	include_once UCSCCOMMS_PLUGIN_DIR . '/lib/functions/shortcodes.php';
+if ( file_exists( UCSCCOMMS_PLUGIN_DIR . 'lib/functions/shortcodes.php' ) ) {
+	include_once UCSCCOMMS_PLUGIN_DIR . 'lib/functions/shortcodes.php';
 }
 
 if ( ! function_exists( 'ucsccomms_acf_json_save_point' ) ) {

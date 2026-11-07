@@ -309,6 +309,9 @@ runs a mix of functions from two copies that can be different versions.
 already defined, so the first copy that loads wins and the second copy does nothing.
 The four unguarded functions also got `function_exists()` guards, to match the rest of
 the codebase. `tests/DoubleInclusionTest.php` includes both files a second time.
+The same change dropped a stray leading slash from the `settings.php` and `shortcodes.php`
+include paths (`UCSCCOMMS_PLUGIN_DIR . '/lib/...'`), which made a double slash because
+`plugin_dir_path()` already ends in one.
 
 ---
 
