@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       UCSC Communications Custom Functionality
+ * Plugin Name:       UCSC Communications Functionality
  * Plugin URI:        https://github.com/ucsc/ucsc-communications-functionality
  * Description:       Custom functionality for UCSC Communications and Marketing Website.
  * Version:           1.0.8

@@ -1,4 +1,4 @@
-# UCSC Communications Custom Functionality
+# UCSC Communications Functionality
 
 [![CI](https://github.com/ucsc/ucsc-communications-functionality/actions/workflows/ci.yml/badge.svg)](https://github.com/ucsc/ucsc-communications-functionality/actions/workflows/ci.yml)
 

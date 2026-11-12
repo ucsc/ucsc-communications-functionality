@@ -363,7 +363,7 @@ function get_plugin_data( $file, $markup = true, $translate = true ) {
 	ucsccomms_test_record( 'get_plugin_data', $file );
 
 	return array(
-		'Name'        => 'UCSC Communications Custom Functionality',
+		'Name'        => 'UCSC Communications Functionality',
 		'Version'     => '9.9.9',
 		'Description' => 'Fixture description.',
 	);

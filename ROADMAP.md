@@ -1,6 +1,6 @@
 # Roadmap
 
-Known issues and planned work for the UCSC Communications Custom Functionality plugin.
+Known issues and planned work for the UCSC Communications Functionality plugin.
 
 Findings below came from an audit against the WordPress Plugin Handbook baseline
 (structure, lifecycle, Settings API, security). Every item is tracked by a GitHub
